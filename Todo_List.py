@@ -1,20 +1,50 @@
 class Todo:
     def __init__(self):
-        pass
-    # def tasks(self, id, description, status, created_at, updated_at):
-    #     self.id = id
-    def add_task(self,tasks):
-        user_choice = input("Would you like to add a task (y/n)?: ").strip().lower()
-        tasks = []
-        if user_choice == "n":
+        self.tasks = []
+    
+    def run(self):
+        while True:
+            choice = input(
+                "What would you like to do?\n"
+                "Add new task (a):\n"
+                "Edit task (e):\n" 
+                "See all tasks (s):\n" 
+                "Quit (q):\n> "
+            ).strip().lower()
+
+            if choice == "q":
+                print("Bye!")
+                break
+            elif choice == "a":
+                self.add_task()
+            elif choice == "s":
+                self.show_tasks()
+            else:
+                print("Please choose a, s, or q.")
+    def add_task(self):
+        while True:
+            add_new_task = input("What would you like to add?: ").strip()
+            if add_new_task:
+                self.tasks.append(add_new_task)
+                print("Task added!")
+            another = input("Add another Task (y/n)?: ").strip().lower()
+            if another == "n":
+                break
+            elif another == "y":
+                continue
+            else:
+                print("Please type 'y' or 'n'.")
+
+
+    def show_tasks(self):
+        if not self.tasks:
+            print("No tasks yet.")
             return
-        elif user_choice == "y":
-            tasks = input("What would you like to add?:\n ")
-            print(tasks)
-        else:
-            print("Please chose 'y' or 'n': ")
+        print("Task list:")
+        for i, t in enumerate(self.tasks, start=1):
+            print(f"{i}. {t}")
 
 
 if __name__ == "__main__":
-    task = Todo()
-    task.add_task()
+    app = Todo()
+    app.run()
