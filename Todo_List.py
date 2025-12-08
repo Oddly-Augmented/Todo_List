@@ -1,3 +1,5 @@
+import json
+
 class Todo:
     def __init__(self):
         self.tasks = []
@@ -21,6 +23,17 @@ class Todo:
                 self.show_tasks()
             else:
                 print("Please choose a, s, or q.")
+class DataBase:
+    def __init__(self, path = "Todo_File.json"):
+        self.task_file = path
+
+    def load_todo_file(self):
+        try:
+            with open(self.task_file, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return []
+
     def add_task(self):
         while True:
             add_new_task = input("What would you like to add?: ").strip()
