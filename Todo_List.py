@@ -1,8 +1,14 @@
 import json
+import math
 
 class Todo:
     def __init__(self):
-        self.tasks =self.load_todo_file()
+        self.tasks = self.load_todo_file()
+        # find the max id or start from 1 if no tasks
+        if self.tasks:
+            self.next_id = max(task["id"] for task in self.tasks) + 1
+        else:
+            self.next_id = 1
 
     ### Load/make json file
     def load_todo_file(self, path = "Todo_File.json"):
@@ -38,11 +44,14 @@ class Todo:
             else:
                 print("Please choose a, s, or q.")
 
+    ### add new tasks with id
     def add_task(self):
         while True:
             add_new_task = input("What would you like to add?: ").strip()
             if add_new_task:
-                self.tasks.append(add_new_task)
+                new_task = {"id": self.next_id, "text": add_new_task}
+                self.tasks.append(new_task)
+                self.next_id += 1
                 self.save_todo_file()
                 print("Task added!")
             another = input("Add another Task (y/n)?: ").strip().lower()
@@ -53,14 +62,14 @@ class Todo:
             else:
                 print("Please type 'y' or 'n'.")
 
-
+    ### show list of tasks with id's
     def show_tasks(self):
         if not self.tasks:
             print("No tasks yet.")
             return
         print("Task list:")
-        for i, t in enumerate(self.tasks, start=1):
-            print(f"{i}. {t}")
+        for task in self.tasks:
+            print(f"{task['id']}: {task['text']}")
                 
 
 
