@@ -1,5 +1,5 @@
 import json
-import math
+
 
 class Todo:
     def __init__(self):
@@ -21,7 +21,7 @@ class Todo:
     def save_todo_file(self,path = "Todo_File.json"):
         with open(path, "w") as f:
             json.dump(self.tasks, f, indent=2)
-        
+
 
     ### Main loop    
     def run(self):
@@ -39,6 +39,8 @@ class Todo:
                 break
             elif choice == "a":
                 self.add_task()
+            elif choice == "e":
+                self.edit_task()
             elif choice == "s":
                 self.show_tasks()
             else:
@@ -61,6 +63,63 @@ class Todo:
                 continue
             else:
                 print("Please type 'y' or 'n'.")
+
+
+    def edit_task(self):
+        if not self.tasks:
+            print("No tasks to edit.")
+            return
+        
+        self.show_tasks()
+        while True:
+            id_input = input("What task by number would you like to edit: ").strip()
+            if id_input == "q":
+                break
+            elif not id_input.isdigit():
+                print("Please enter a valid number.")
+                continue
+            else:
+                print("Please enter a valid number.")
+
+            task_id = int(id_input)
+            task = next((t for t in self.tasks if t["id"] == task_id), None)
+            if task is None:
+                print("No task with that id. Try again.")
+                continue
+
+            print(f"Current text: {task['text']}")
+            edit_task_input = input(
+                "What would you like to do?\n"
+                "Edit task (e):\n" 
+                "Delete task (d):\n" 
+                "Quit (q):\n> "
+            ).strip().lower()
+
+            if edit_task_input == "q":
+                print("Bye!")
+                break
+            elif edit_task_input == "e":
+                new_text = input("New text (leave blank to cancel): ").strip()
+                if not new_text:
+                    print("Edit cancelled.")
+                    return
+                
+                task["text"] = new_text
+                self.save_todo_file()
+                print("Task updated.")
+                return
+            elif edit_task_input == "d":
+                self.tasks = [t for t in self.tasks if t["id"] != task_id]
+                self.save_todo_file()
+                print("Task deleted.")
+                return
+            else:
+                print("Please choose e, d, or q.")
+
+
+
+
+        
 
     ### show list of tasks with id's
     def show_tasks(self):
